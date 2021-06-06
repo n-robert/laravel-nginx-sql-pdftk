@@ -1,0 +1,48 @@
+version: '3.7'
+
+services: 
+  server:
+    build:
+      context: docker/server
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - internal
+
+  pgsql:
+    build: ./docker/pgsql
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/pgsql/init:/docker-entrypoint-initdb.d
+      - ./docker/pgsql/pgdata:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=${DB_DATABASE_PGSQL}
+      - POSTGRES_USER=${DB_USERNAME_PGSQL}
+      - POSTGRES_PASSWORD=${DB_PASSWORD_PGSQL}
+    networks:
+      - internal
+
+  # mysql:
+    # build: ./docker/mysql
+    # ports:
+      # - 3306:3306
+    # volumes:
+      # - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      # - ./docker/mysql/mydata:/var/lib/mysql
+    # environment:
+      # - MYSQL_DB=${DB_DATABASE}
+      # - MYSQL_USER=${DB_USERNAME}
+      # - MYSQL_PASSWORD=${DB_PASSWORD}
+    # networks:
+      # - internal
+      
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
