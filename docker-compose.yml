@@ -8,10 +8,11 @@ services:
       - 80:80
     volumes:
       - ./:/var/www/html
+      - ./storage/app/public/:/var/www/public/storage/
     networks:
       - internal
 
-  pgsql:
+  db:
     build: ./docker/pgsql
     ports:
       - 5432:5432
@@ -25,7 +26,7 @@ services:
     networks:
       - internal
 
-  # mysql:
+  # db:
     # build: ./docker/mysql
     # ports:
       # - 3306:3306
