@@ -29,6 +29,7 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
         intl \
         exif \
         pdo_pgsql \
+        pdo_mysql \
         bcmath
 
 # 5. pdftk
