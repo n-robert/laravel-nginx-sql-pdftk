@@ -13,7 +13,12 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
--- DROP ROLE IF EXISTS awesome_user;
--- CREATE ROLE awesome_user WITH LOGIN SUPERUSER PASSWORD 'awesome_password';
+DO $$
+BEGIN
+  CREATE ROLE awesome_user WITH LOGIN SUPERUSER PASSWORD 'awesome_password';
+  EXCEPTION WHEN DUPLICATE_OBJECT THEN
+  RAISE NOTICE 'not creating role awesome_user -- it already exists';
+END
+$$;
 
 -- Do your needed PostgresSQL stuff here
