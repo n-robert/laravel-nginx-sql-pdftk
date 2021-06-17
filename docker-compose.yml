@@ -1,18 +1,34 @@
 version: '3.7'
 
-services: 
-  server:
+services:
+  php-fpm:
+    container_name: php-fpm
     build:
-      context: docker/server
-    image: apache  
-    ports:
-      - 80:80
+      context: docker/php-fpm
+    image: php-fpm
     volumes:
-      - ./:/var/www/html
-      - ./storage/app/public/:/var/www/public/storage/
+      - ./:/var/www
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+    depends_on:
+      - db
     networks:
       - internal
-
+  nginx:
+    container_name: nginx
+    build:
+      context: docker/nginx
+    image: nginx
+    volumes:
+      - ./:/var/www
+      - ./storage/app/public/:/var/www/public/storage/
+    ports:
+      - 80:80
+    depends_on:
+      - php-fpm
+    networks:
+      - internal
   db:
     build: ./docker/pgsql
     image: pgsql
@@ -43,7 +59,6 @@ services:
       #- MYSQL_ALLOW_EMPTY_PASSWORD=true
     #networks:
       #- internal
-      
 networks:
   internal:
     driver: bridge
