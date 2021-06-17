@@ -1,2 +1,2 @@
-# laravel-apache-sql-pdftk
-A docker template to setup Laravel with Apache, PostgreSQL (MySQL) and pdftk.
+# laravel-nginx-sql-pdftk
+A docker template to setup Laravel with Nginx, PostgreSQL (MySQL) and pdftk.
